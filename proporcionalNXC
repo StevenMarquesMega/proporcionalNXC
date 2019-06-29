@@ -1,0 +1,28 @@
+int Kp = 1;    //valor atribuido para controle de curva.
+int Alvo = 35; //valor atribuido para controle entre preto && branco.
+int Recebido;  //variavel para receber o valor da subtração entre a leitura e o alvo.
+int Valor;     //variavel para receber a leitura do sensor de luz.
+int Controle;  //varialvel para atribuir o valor da operação do proporcional.
+
+void Leitura(){
+
+     SetSensorType(IN_1, SENSOR_TYPE_LIGHT_ACTIVE);
+     SetSensorMode(IN_1, SENSOR_MODE_RAW);
+     Valor = SensorRaw(IN_1);
+}
+void Proporcional(){
+
+     //calculo para proporcional.
+     Recebido = Alvo - Valor;
+     Controle = Recebido * Kp;
+}
+void mover(){
+
+     OnFwd(OUT_BC, Controle);
+}
+task main(){
+     while(true){
+     Leitura();
+     Proporcional();
+     mover();}
+}
